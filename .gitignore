@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/$PRODUCT_WORKSPACE_FILE$
+.idea/.gitignore
+.idea/compiler.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/xtextAutoBuilderState.xml
+SkyLinesTracker4CanAsDevice.iml
+__pycache__/
+logfile.asc
+logfile.txt
