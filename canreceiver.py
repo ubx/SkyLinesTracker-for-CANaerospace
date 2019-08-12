@@ -22,8 +22,10 @@
 import argparse
 import socket
 import struct
+
 import can
 from skylines import create_fix_message
+from collections import deque
 
 parser = argparse.ArgumentParser(description='Read position updates from can-bus and sent it to SkyLines')
 parser.add_argument('trackingkey', metavar='key', type=lambda x: int(x, 16), help='Your live tracking key')
@@ -36,8 +38,8 @@ tracking_interval = args.interval
 channel = args.channel
 
 CAN_SFF_MASK = 0x000007FF
-HOST_PORT = ("127.0.0.1", 5597)
-## HOST_PORT = ("95.128.34.172", 5597)
+HOST_PORT = ("127.0.0.1", 5597) ## for testing
+##HOST_PORT = ("95.128.34.172", 5597)
 
 bus = can.interface.Bus(channel=channel, bustype='socketcan')
 bus.set_filters(
@@ -71,14 +73,23 @@ def getChar4():
 
 
 last_s = 0
-lat = None
-lon = None
-gs = None
-tt = None
-tas = None
-alt = None
-vario = None
-enl = None
+
+
+def initParams():
+    global lat, lon, gs, tt, tas, alt, vario, enl
+    lat = None
+    lon = None
+    gs = None
+    tt = None
+    tas = None
+    alt = None
+    vario = None
+    enl = None
+
+
+initParams()
+
+### skylinesMsgQueue = deque([])
 
 for canMsg in bus:
 
@@ -99,6 +110,9 @@ for canMsg in bus:
                 vario=vario,
                 enl=enl)
             sock.sendto(skylinesMsg, (HOST_PORT[0], HOST_PORT[1]))
+            initParams()
+            ### skylinesMsgQueue.append(skylinesMsg)
+            ### if 1000 < len(skylinesMsgQueue): skylinesMsgQueue.popleft()
 
     elif canMsg.arbitration_id == 316:
         tas = getFloat()
