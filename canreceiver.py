@@ -38,8 +38,7 @@ tracking_interval = args.interval
 channel = args.channel
 
 CAN_SFF_MASK = 0x000007FF
-HOST_PORT = ("127.0.0.1", 5597) ## for testing
-##HOST_PORT = ("95.128.34.172", 5597)
+HOST_PORT = ("skylines.aero", 5597)
 
 bus = can.interface.Bus(channel=channel, bustype='socketcan')
 bus.set_filters(
