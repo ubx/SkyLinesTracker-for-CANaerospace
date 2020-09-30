@@ -25,7 +25,6 @@ import struct
 
 import can
 from skylines import create_fix_message
-from collections import deque
 
 parser = argparse.ArgumentParser(description='Read position updates from can-bus and sent it to SkyLines')
 parser.add_argument('trackingkey', metavar='key', type=lambda x: int(x, 16), help='Your live tracking key')
@@ -88,8 +87,6 @@ def initParams():
 
 initParams()
 
-### skylinesMsgQueue = deque([])
-
 for canMsg in bus:
 
     if canMsg.arbitration_id == 1200:  # UTC
@@ -110,8 +107,7 @@ for canMsg in bus:
                 enl=enl)
             sock.sendto(skylinesMsg, (HOST_PORT[0], HOST_PORT[1]))
             initParams()
-            ### skylinesMsgQueue.append(skylinesMsg)
-            ### if 1000 < len(skylinesMsgQueue): skylinesMsgQueue.popleft()
+
 
     elif canMsg.arbitration_id == 316:
         tas = getFloat()
